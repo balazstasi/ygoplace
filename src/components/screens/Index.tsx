@@ -5,7 +5,9 @@ import { SignInButton } from '~/components/domain/auth/SignInButton';
 import { SignOutButton } from '~/components/domain/auth/SignOutButton';
 import { Head } from '~/components/shared/Head';
 import { getCardsByIds, getCardsByName } from '~/lib/api';
-import { YgoProDeckCard } from '~/types/Card';
+import useYuGiStore, { YgoStore } from '~/store/YuGiStore';
+import { ToFixLater } from '~/types';
+import { Card, YgoProDeckCard } from '~/types/Card';
 
 function Index() {
   const { state } = useAuthState();
@@ -13,6 +15,13 @@ function Index() {
   const completeButtonRef = useRef(null);
 
   const [card, setCard] = useState<YgoProDeckCard[] | null>(null);
+
+  const { selectedCards, setSelectedCards } = useYuGiStore((store: YgoStore) => {
+    return {
+      selectedCards: store.selectedCards,
+      setSelectedCards: store.setSelectedCards,
+    };
+  });
 
   return (
     <>
@@ -25,11 +34,16 @@ function Index() {
               onClick={async () => {
                 const cards = await getCardsByIds(['6983839', '46986421']);
                 console.log(cards);
-                setCard(cards);
+                setSelectedCards(cards);
               }}
             >
-              Get Dark Magician
+              Get Tornado Dragon and Dark Magician by ID
             </button>
+            <div className="flex flex-row">
+              {selectedCards.map((card: Card) => {
+                return <img src={card.pictureUrl} alt={card.name} style={{ width: '200px' }} className="py-4 px-2" />;
+              })}
+            </div>
             <div className="mt-4 grid gap-2">
               {state.state === 'UNKNOWN' ? null : state.state === 'SIGNED_OUT' ? <SignInButton /> : <SignOutButton />}
               <button onClick={() => setIsOpen(true)} className="btn btn-primary">

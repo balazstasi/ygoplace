@@ -55,7 +55,7 @@ const API_URL = import.meta.env.VITE_YGO_PRO_DECK_API_URL;
     }
 ]
  */
-export const getCardsByName = async (name: string): Promise<{ data: YgoProDeckCard }[]> => {
+export const getCardsByName = async (name: string): Promise<{ data: YgoProDeckCard[] }[]> => {
   const response = await fetch(`${API_URL}?name=${name}`).catch((error) => {
     console.error(error);
     return error;
@@ -64,7 +64,7 @@ export const getCardsByName = async (name: string): Promise<{ data: YgoProDeckCa
   return response.json();
 };
 
-export const getCardById = async (id: string): Promise<{ data: YgoProDeckCard }> => {
+export const getCardById = async (id: string): Promise<{ data: YgoProDeckCard[] }> => {
   const response = await fetch(`${API_URL}?id=${id}`).catch((error) => {
     console.error(error);
     return error;
@@ -74,5 +74,5 @@ export const getCardById = async (id: string): Promise<{ data: YgoProDeckCard }>
 
 export const getCardsByIds = async (ids: string[]): Promise<YgoProDeckCard[]> => {
   const response = await Promise.all(ids.map((id) => getCardById(id)));
-  return response.map(({ data }) => data);
+  return response.map(({ data }) => data[0]);
 };

@@ -1,11 +1,11 @@
 export interface Card {
   id: string;
   userId: string;
-  ygoProDeckId: string;
+  ygoProDeckId: number;
   name: string;
   marketPrice: number;
   price: number;
-  cardType: CardType;
+  cardType: string;
   saleDate: Date;
   pictureUrl: string;
 }
